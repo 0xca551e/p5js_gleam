@@ -61,6 +61,8 @@ pub opaque type SketchConfig(model, ignored) {
     on_key_released: Option(fn(String, Int, model) -> model),
     /// Called whenever the user moves their mouse. on_mouse_move functions take the x and y coordinates of the mouse, and the current model, and return the updated model.
     on_mouse_moved: Option(fn(Float, Float, model) -> model),
+    /// Called whenever the user presses down on their mouse. on_mouse_pressed functions take the x and y coordinates of the mouse, and the current model, and return the updated model.
+    on_mouse_pressed: Option(fn(Float, Float, model) -> model),
     /// Called whenever the user clicks their mouse. on_mouse_click functions take the x and y coordinates of the mouse, and the current model, and return the updated model.
     on_mouse_clicked: Option(fn(Float, Float, model) -> model),
   )
@@ -79,6 +81,8 @@ pub opaque type SketchConfig(model, ignored) {
     on_key_released: Option(fn(String, Int, model) -> model),
     /// Called whenever the user moves their mouse. on_mouse_move functions take the x and y coordinates of the mouse, and the current model, and return the updated model.
     on_mouse_moved: Option(fn(Float, Float, model) -> model),
+    /// Called whenever the user presses down on their mouse. on_mouse_pressed functions take the x and y coordinates of the mouse, and the current model, and return the updated model.
+    on_mouse_pressed: Option(fn(Float, Float, model) -> model),
     /// Called whenever the user clicks their mouse. on_mouse_click functions take the x and y coordinates of the mouse, and the current model, and return the updated model.
     on_mouse_clicked: Option(fn(Float, Float, model) -> model),
   )
@@ -92,6 +96,7 @@ pub fn create_sketch(
   BaseConfig(
     init,
     draw,
+    option.None,
     option.None,
     option.None,
     option.None,
@@ -115,6 +120,7 @@ pub fn create_sketch_with_preloading(
     option.None,
     option.None,
     option.None,
+    option.None,
   )
 }
 
@@ -125,14 +131,15 @@ pub fn set_on_tick(
 ) -> SketchConfig(model, ignored) {
   case s {
     BaseConfig(
-      init,
-      draw,
-      _on_tick,
-      on_key_pressed,
-      on_key_released,
-      on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        init,
+        draw,
+        _on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       BaseConfig(
         init,
         draw,
@@ -140,18 +147,20 @@ pub fn set_on_tick(
         on_key_pressed,
         on_key_released,
         on_mouse_moved,
+        on_mouse_pressed,
         on_mouse_clicked,
       )
     ConfigWithLoadingAssets(
-      preload,
-      init,
-      draw,
-      _on_tick,
-      on_key_pressed,
-      on_key_released,
-      on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        preload,
+        init,
+        draw,
+        _on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       ConfigWithLoadingAssets(
         preload,
         init,
@@ -160,6 +169,7 @@ pub fn set_on_tick(
         on_key_pressed,
         on_key_released,
         on_mouse_moved,
+        on_mouse_pressed,
         on_mouse_clicked,
       )
   }
@@ -172,14 +182,15 @@ pub fn set_on_key_pressed(
 ) -> SketchConfig(model, ignored) {
   case s {
     BaseConfig(
-      init,
-      draw,
-      on_tick,
-      _on_key_pressed,
-      on_key_released,
-      on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        init,
+        draw,
+        on_tick,
+        _on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       BaseConfig(
         init,
         draw,
@@ -187,18 +198,20 @@ pub fn set_on_key_pressed(
         option.Some(on_key_pressed),
         on_key_released,
         on_mouse_moved,
+        on_mouse_pressed,
         on_mouse_clicked,
       )
     ConfigWithLoadingAssets(
-      preload,
-      init,
-      draw,
-      on_tick,
-      _on_key_pressed,
-      on_key_released,
-      on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        preload,
+        init,
+        draw,
+        on_tick,
+        _on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       ConfigWithLoadingAssets(
         preload,
         init,
@@ -207,6 +220,7 @@ pub fn set_on_key_pressed(
         option.Some(on_key_pressed),
         on_key_released,
         on_mouse_moved,
+        on_mouse_pressed,
         on_mouse_clicked,
       )
   }
@@ -219,14 +233,15 @@ pub fn set_on_key_released(
 ) -> SketchConfig(model, ignored) {
   case s {
     BaseConfig(
-      init,
-      draw,
-      on_tick,
-      on_key_pressed,
-      _on_key_released,
-      on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        _on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       BaseConfig(
         init,
         draw,
@@ -234,18 +249,20 @@ pub fn set_on_key_released(
         on_key_pressed,
         option.Some(on_key_released),
         on_mouse_moved,
+        on_mouse_pressed,
         on_mouse_clicked,
       )
     ConfigWithLoadingAssets(
-      preload,
-      init,
-      draw,
-      on_tick,
-      on_key_pressed,
-      _on_key_released,
-      on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        preload,
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        _on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       ConfigWithLoadingAssets(
         preload,
         init,
@@ -254,6 +271,7 @@ pub fn set_on_key_released(
         on_key_pressed,
         option.Some(on_key_released),
         on_mouse_moved,
+        on_mouse_pressed,
         on_mouse_clicked,
       )
   }
@@ -266,14 +284,15 @@ pub fn set_on_mouse_moved(
 ) -> SketchConfig(model, ignored) {
   case s {
     BaseConfig(
-      init,
-      draw,
-      on_tick,
-      on_key_pressed,
-      on_key_released,
-      _on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        _on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       BaseConfig(
         init,
         draw,
@@ -281,18 +300,20 @@ pub fn set_on_mouse_moved(
         on_key_pressed,
         on_key_released,
         option.Some(on_mouse_moved),
+        on_mouse_pressed,
         on_mouse_clicked,
       )
     ConfigWithLoadingAssets(
-      preload,
-      init,
-      draw,
-      on_tick,
-      on_key_pressed,
-      on_key_released,
-      _on_mouse_moved,
-      on_mouse_clicked,
-    ) ->
+        preload,
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        _on_mouse_moved,
+        on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
       ConfigWithLoadingAssets(
         preload,
         init,
@@ -301,6 +322,58 @@ pub fn set_on_mouse_moved(
         on_key_pressed,
         on_key_released,
         option.Some(on_mouse_moved),
+        on_mouse_pressed,
+        on_mouse_clicked,
+      )
+  }
+}
+
+/// Sets the `on_mouse_pressed` function to be called.
+pub fn set_on_mouse_pressed(
+  s: SketchConfig(model, ignored),
+  on_mouse_pressed: fn(Float, Float, model) -> model,
+) -> SketchConfig(model, ignored) {
+  case s {
+    BaseConfig(
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        _on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
+      BaseConfig(
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        option.Some(on_mouse_pressed),
+        on_mouse_clicked,
+      )
+    ConfigWithLoadingAssets(
+        preload,
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        _on_mouse_pressed,
+        on_mouse_clicked,
+      ) ->
+      ConfigWithLoadingAssets(
+        preload,
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        option.Some(on_mouse_pressed),
         on_mouse_clicked,
       )
   }
@@ -313,14 +386,15 @@ pub fn set_on_mouse_clicked(
 ) -> SketchConfig(model, ignored) {
   case s {
     BaseConfig(
-      init,
-      draw,
-      on_tick,
-      on_key_pressed,
-      on_key_released,
-      on_mouse_moved,
-      _on_mouse_clicked,
-    ) ->
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        _on_mouse_clicked,
+      ) ->
       BaseConfig(
         init,
         draw,
@@ -328,18 +402,20 @@ pub fn set_on_mouse_clicked(
         on_key_pressed,
         on_key_released,
         on_mouse_moved,
+        on_mouse_pressed,
         option.Some(on_mouse_clicked),
       )
     ConfigWithLoadingAssets(
-      preload,
-      init,
-      draw,
-      on_tick,
-      on_key_pressed,
-      on_key_released,
-      on_mouse_moved,
-      _on_mouse_clicked,
-    ) ->
+        preload,
+        init,
+        draw,
+        on_tick,
+        on_key_pressed,
+        on_key_released,
+        on_mouse_moved,
+        on_mouse_pressed,
+        _on_mouse_clicked,
+      ) ->
       ConfigWithLoadingAssets(
         preload,
         init,
@@ -348,6 +424,7 @@ pub fn set_on_mouse_clicked(
         on_key_pressed,
         on_key_released,
         on_mouse_moved,
+        on_mouse_pressed,
         option.Some(on_mouse_clicked),
       )
   }

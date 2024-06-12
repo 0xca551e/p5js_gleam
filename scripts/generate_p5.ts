@@ -60,6 +60,9 @@ const elements: Record<string, Binding> = {
       "p4_y: Float",
     ],
   },
+  beginShape: { arguments: [] },
+  vertex: { arguments: ["x: Float", "y: Float"] },
+  endShape: { arguments: ["close: String"] },
   image: {
     arguments: [
       "image: P5Image",
@@ -69,6 +72,7 @@ const elements: Record<string, Binding> = {
       "height: Float",
     ],
   },
+  clear: { arguments: [] },
   fill: { arguments: ["color_hex: String"] },
   noFill: { arguments: [] },
   stroke: { arguments: ["color_hex: String"] },
@@ -84,6 +88,13 @@ const elements: Record<string, Binding> = {
     arguments: ["path: String"],
     returnType: "P5Font",
   },
+  isMousePressed: {
+    arguments: [],
+  },
+  push: { arguments: [] },
+  pop: { arguments: [] },
+  translate: { arguments: ["x: Float", "y: Float"] },
+  rotate: { arguments: ["r: Float"] },
 };
 
 const camelToSnakeCase = (str: string) =>
@@ -158,6 +169,12 @@ export const startSketch = (config) => {
     if (is_some(config.on_key_released)) {
       p.keyReleased = function () {
         model = unwrap(config.on_key_released)(p.key, p.keyCode, model);
+      };
+    }
+
+    if (is_some(config.on_mouse_pressed)) {
+      p.mouseClicked = function () {
+        model = unwrap(config.on_mouse_pressed)(p.pmouseX, p.pmouseY, model);
       };
     }
 

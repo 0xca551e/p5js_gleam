@@ -33,6 +33,12 @@ export const startSketch = (config) => {
       };
     }
 
+    if (is_some(config.on_mouse_pressed)) {
+      p.mouseClicked = function () {
+        model = unwrap(config.on_mouse_pressed)(p.pmouseX, p.pmouseY, model);
+      };
+    }
+
     if (is_some(config.on_mouse_clicked)) {
       p.mouseClicked = function () {
         model = unwrap(config.on_mouse_clicked)(p.pmouseX, p.pmouseY, model);
@@ -111,8 +117,28 @@ export function quad(p, ...args) {
   return p;
 }
 
+export function beginShape(p, ...args) {
+  p.beginShape(...args);
+  return p;
+}
+
+export function vertex(p, ...args) {
+  p.vertex(...args);
+  return p;
+}
+
+export function endShape(p, ...args) {
+  p.endShape(...args);
+  return p;
+}
+
 export function image(p, ...args) {
   p.image(...args);
+  return p;
+}
+
+export function clear(p, ...args) {
+  p.clear(...args);
   return p;
 }
 
@@ -158,3 +184,29 @@ export function loadImage(p, ...args) {
 export function loadFont(p, ...args) {
   return p.loadFont(...args);
 }
+
+export function isMousePressed(p, ...args) {
+  p.isMousePressed(...args);
+  return p;
+}
+
+export function push(p, ...args) {
+  p.push(...args);
+  return p;
+}
+
+export function pop(p, ...args) {
+  p.pop(...args);
+  return p;
+}
+
+export function translate(p, ...args) {
+  p.translate(...args);
+  return p;
+}
+
+export function rotate(p, ...args) {
+  p.rotate(...args);
+  return p;
+}
+
